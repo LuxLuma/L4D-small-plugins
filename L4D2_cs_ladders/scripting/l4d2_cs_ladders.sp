@@ -51,7 +51,7 @@ public Plugin myinfo =
 	author = "Lux",
 	description = "Makes ladders similar to counter-strike",
 	version = PLUGIN_VERSION,
-	url = ""
+	url = "https://github.com/LuxLuma/L4D-small-plugins/tree/master/L4D2_cs_ladders"
 };
 
 public void OnPluginStart()
@@ -84,6 +84,7 @@ public void OnPluginStart()
 		PrintToServer("%s Enabled \"%s\" patch", PLUGIN_NAME_KEY, TERROR_PRE_THINK_KEY);
 	}
 	
+	// not as important as first 2 patches, can still function enough to be good enough.
 	patcher = MemoryPatch.CreateFromConf(hGameData, TERROR_ON_LADDER_MOUNT_KEY);
 	if(!patcher.Validate())
 	{
