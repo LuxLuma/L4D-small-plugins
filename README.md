@@ -1,2 +1,1 @@
-# L4D-small-plugins
- small plugins here for sourcemod
+## small plugins are placed here.

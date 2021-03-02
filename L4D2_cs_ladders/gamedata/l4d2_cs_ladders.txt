@@ -1,0 +1,111 @@
+"Games"
+{
+	"left4dead2"
+	{
+		"MemPatches"
+		{
+			"CTerrorWeapon::CanDeployFor__movetype_patch"
+			{
+				"signature"			"CTerrorWeapon::CanDeployFor"
+				"linux"
+				{
+					"offset"		"85"
+					"verify"		"\x09"
+					"patch"			"\xFF"
+					
+				}
+				"windows"
+				{
+					"offset"		"87"
+					"verify"		"\x09"
+					"patch"			"\xFF"
+				}
+			}
+			"CTerrorPlayer::PreThink__SafeDropLogic_patch"
+			{
+				"signature"			"CTerrorPlayer::PreThink"
+				"linux"
+				{
+					"offset"		"181"
+					"verify"		"\x09"
+					"patch"			"\xFF"
+					
+				}
+				"windows"
+				{
+					"offset"		"498"
+					"verify"		"\x09"
+					"patch"			"\xFF"
+				}
+			}
+			"CTerrorPlayer::OnLadderMount__WeaponHolster_patch"
+			{
+				"signature"			"CTerrorPlayer::OnLadderMount"
+				"linux"
+				{
+					"offset"		"68"
+					"verify"		"\x75"
+					"patch"			"\x90\x90"
+					
+				}
+				"windows"
+				{
+					"offset"		"47"
+					"verify"		"\x74"
+					"patch"			"\x5E\xC3" //pop and ret at jnz
+				}
+			}
+			"CTerrorPlayer::OnLadderDismount__WeaponDeploy_patch" //stops the WeaponDeploy call
+			{
+				"signature"			"CTerrorPlayer::OnLadderDismount"
+				"linux"
+				{
+					"offset"		"68"
+					"verify"		"\x8B\x10\x89\x04\x24\xFF\x92\x24\x04\x00\x00"
+					"patch"			"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"
+					
+				}
+				"windows"
+				{
+					"offset"		"49"
+					"verify"		"\xFF\xD0"
+					"patch"			"\x90\x90"
+				}
+			}
+		}
+		"Signatures"
+		{
+			"CTerrorWeapon::CanDeployFor"
+			{
+				"library"		"server"
+				"linux"			"@_ZN13CTerrorWeapon12CanDeployForEP13CTerrorPlayer"
+				"windows"		"\x55\x8B\xEC\x56\x8B\x75\x08\x57\x8B\xF9\x85\xF6\x0F\x84\x2A\x2A\x2A\x2A\x8B\x06\x8B\x90\xE4\x07\x00\x00"
+								/* 55 8B EC 56 8B 75 08 57 8B F9 85 F6 0F 84 ? ? ? ? 8B 06 8B 90 E4 07 00 00 */
+			}
+			"CTerrorPlayer::PreThink"
+			{
+				"library"	"server"
+				"linux"		"@_ZN13CTerrorPlayer8PreThinkEv"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x64\xA1\x2A\x2A\x2A\x2A\x33\xC5\x89\x45\xFC\x56\x57\x8B\xF1"
+							/* 55 8B EC 83 EC 64 A1 ? ? ? ? 33 C5 89 45 FC 56 57 8B F1 */
+							/* Found by unique string "#L4D_idle_spectator" */
+			}
+			"CTerrorPlayer::OnLadderMount"
+			{
+				"library"	"server"
+				"linux"		"@_ZN13CTerrorPlayer13OnLadderMountEv"
+				"windows"	"\x56\x68\x2A\x2A\x2A\x2A\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x8B\xCE"
+							/* 56 68 ? ? ? ? 8B F1 E8 ? ? ? ? 8B CE */
+							/* XREF function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
+			}
+			"CTerrorPlayer::OnLadderDismount"
+			{
+				"library"	"server"
+				"linux"		"@_ZN13CTerrorPlayer16OnLadderDismountEv"
+				"windows"	"\x56\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x50\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\x84\xC0\x74\x2A\x8B\xCE\xE8\x2A\x2A\x2A\x2A\x85\xC0"
+							/* 56 8B F1 E8 ? ? ? ? 50 E8 ? ? ? ? 83 C4 04 84 C0 74 ? 8B CE E8 ? ? ? ? 85 C0 */
+							/* XREF function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
+			}
+		}
+	}
+}
