@@ -45,7 +45,7 @@
 				{
 					"offset"		"68"
 					"verify"		"\x75"
-					"patch"			"\x90\x90"
+					"patch"			"\x90\x90" //nop
 					
 				}
 				"windows"
@@ -62,14 +62,14 @@
 				{
 					"offset"		"68"
 					"verify"		"\x8B\x10\x89\x04\x24\xFF\x92\x24\x04\x00\x00"
-					"patch"			"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"
+					"patch"			"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90" //lots of nops
 					
 				}
 				"windows"
 				{
 					"offset"		"49"
 					"verify"		"\xFF\xD0"
-					"patch"			"\x90\x90"
+					"patch"			"\x90\x90" //nop
 				}
 			}
 		}
@@ -96,7 +96,7 @@
 				"linux"		"@_ZN13CTerrorPlayer13OnLadderMountEv"
 				"windows"	"\x56\x68\x2A\x2A\x2A\x2A\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x8B\xCE"
 							/* 56 68 ? ? ? ? 8B F1 E8 ? ? ? ? 8B CE */
-							/* XREF function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
+							/* XREF from function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
 			}
 			"CTerrorPlayer::OnLadderDismount"
 			{
@@ -104,7 +104,7 @@
 				"linux"		"@_ZN13CTerrorPlayer16OnLadderDismountEv"
 				"windows"	"\x56\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x50\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\x84\xC0\x74\x2A\x8B\xCE\xE8\x2A\x2A\x2A\x2A\x85\xC0"
 							/* 56 8B F1 E8 ? ? ? ? 50 E8 ? ? ? ? 83 C4 04 84 C0 74 ? 8B CE E8 ? ? ? ? 85 C0 */
-							/* XREF function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
+							/* XREF from function CTerrorPlayer::PlayerRunCommand search string "CTerrorPlayer::PlayerRunCommand" */
 			}
 		}
 	}
