@@ -37,9 +37,9 @@
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	EngineVersion CurrentEngine = GetEngineVersion();
-	if(CurrentEngine != Engine_Left4Dead2)
+	if(CurrentEngine != Engine_Left4Dead && CurrentEngine != Engine_Left4Dead2)
 	{
-		strcopy(error, err_max, "Plugin only supports Left 4 Dead 2");
+		strcopy(error, err_max, "Plugin only supports Left 4 Dead 1 & 2");
 		return APLRes_SilentFailure;
 	}
 	return APLRes_Success;
@@ -47,7 +47,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public Plugin myinfo =
 {
-	name = "[L4D2]cs_ladders",
+	name = "[L4D & L4D2]cs_ladders",
 	author = "Lux",
 	description = "Makes ladders similar to counter-strike",
 	version = PLUGIN_VERSION,
