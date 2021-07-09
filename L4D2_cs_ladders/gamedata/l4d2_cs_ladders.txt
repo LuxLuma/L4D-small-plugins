@@ -117,7 +117,7 @@
 				"signature"			"CTerrorWeapon::CanDeployFor"
 				"linux"
 				{
-					"offset"		"75"
+					"offset"		"76"
 					"verify"		"\x09"
 					"patch"			"\xFF"
 					
