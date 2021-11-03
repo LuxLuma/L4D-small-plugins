@@ -37,9 +37,15 @@
 #define COLOUR "5 5 5"
 #define BRIGHTNESS "5"
 #define INNER_CONE "1"
-#define OUTERCONE "37"
+#define OUTERCONE "22"
 #define SPOTLIGHT_RANGE 700.0
 #define SPOTLIGHT_SIZE 200.0
+#define LIGHT_OFFSET 20.0
+
+#define AMBIENT_COLOUR "50 50 50"
+#define AMBIENT_BRIGHTNESS "1"
+#define AMBIENT_LIGHT_SIZE 200.0
+#define AMBIENT_LIGHT_OFFSET 40.0
 
 #define COOKIE_DEFAULT "1"
 
@@ -75,8 +81,11 @@ enum
 
 //flashlight
 int g_LightOwner[2048+1];
+int g_AmbientLightOwner[2048+1];
 //spec check bool do it once not on every light :P
 int g_Spec[MAXPLAYERS+1];
+
+bool g_bCanAnyoneSeeFlashLights = false;
 
 enum struct FlashLightData
 {
@@ -88,6 +97,14 @@ enum struct FlashLightData
 	
 	bool m_bShowFlashLights;
 	
+	int m_ambientLightRef;
+	int m_ambientLastActiveWeaponRef;
+	
+	void DoLighting()
+	{
+		this.SetupFlashLight();
+		this.SetupAmbientLight(this.m_client);
+	}
 	//makes use of clientside cone model illumination rather than the spotlight illumination, spotlight only illuminates on geometry, displacements ect.
 	bool MakeFlashLight()
 	{
@@ -120,8 +137,99 @@ enum struct FlashLightData
 		SDKHook(this.m_flashLightRef, SDKHook_SetTransmit, HideFlashLightFromOwner);
 		return true;
 	}
+	bool MakeAmbientLight()
+	{
+		if(this.AmbientLightIsValid())
+			return true;
+		
+		this.m_ambientLightRef = CreateEntityByName("light_dynamic");
+		if(this.m_ambientLightRef == -1)
+		{
+			return false;
+		}
+		
+		DispatchKeyValue(this.m_ambientLightRef, "brightness", AMBIENT_BRIGHTNESS);
+		//DispatchKeyValueFloat(this.m_ambientLightRef, "spotlight_radius", SPOTLIGHT_SIZE);
+		DispatchKeyValueFloat(this.m_ambientLightRef, "distance", AMBIENT_LIGHT_SIZE);
+		DispatchKeyValue(this.m_ambientLightRef, "style", "-1");
+		
+		DispatchKeyValue(this.m_ambientLightRef, "_light", AMBIENT_COLOUR);
+		
+		//DispatchKeyValue(this.m_ambientLightRef, "_inner_cone", INNER_CONE);
+		//DispatchKeyValue(this.m_ambientLightRef, "_cone", OUTERCONE);
+		
+		DispatchKeyValue(this.m_ambientLightRef, "spawnflags", "0");
+		
+		DispatchSpawn(this.m_ambientLightRef);
+		AcceptEntityInput(this.m_ambientLightRef, "TurnOn");
+		
+		g_AmbientLightOwner[this.m_ambientLightRef] = this.m_client;
+		this.m_ambientLightRef = EntIndexToEntRef(this.m_ambientLightRef);
+		SDKHook(this.m_ambientLightRef, SDKHook_SetTransmit, HideFlashLightFromOthers);
+		return true;
+	}
+	void SetupAmbientLight(int clientToCheck)
+	{
+		if(IsFakeClient(this.m_client))//bots don't neet it
+			return;
+		
+		int viewModel = GetEntPropEnt(clientToCheck, Prop_Send, "m_hViewModel");
+		if(viewModel == -1)
+		{
+			this.DeleteAmbientLight();
+			return;
+		}
+		
+		int iFlags = GetEntProp(viewModel, Prop_Data, "m_fEffects");
+		if(iFlags & EF_NODRAW)
+		{
+			this.DeleteAmbientLight();
+			return;
+		}
+		
+		iFlags = GetEntProp(clientToCheck, Prop_Data, "m_fEffects");
+		#if DEBUG
+		if(true)
+		#else
+		if(iFlags & EF_DIMLIGHT)
+		#endif
+		{
+			if(this.MakeAmbientLight())
+			{
+				int weaponRef = GetEntPropEnt(clientToCheck, Prop_Data, "m_hActiveWeapon");
+				weaponRef = EntIndexToEntRef(weaponRef);
+				if(this.m_ambientLastActiveWeaponRef != weaponRef)
+				{
+					this.m_ambientLastActiveWeaponRef = weaponRef;
+					SetVariantString("!activator");
+					AcceptEntityInput(this.m_ambientLightRef, "SetParent", viewModel);
+					
+					if(LookupAttachment(viewModel, "flashlight"))
+					{
+						SetVariantString("flashlight");
+						AcceptEntityInput(this.m_ambientLightRef, "SetParentAttachment");
+					}
+					else
+					{
+						TeleportEntity(this.m_ambientLightRef, view_as<float>({AMBIENT_LIGHT_OFFSET, 0.0, 0.0}), NULL_VECTOR, NULL_VECTOR);
+						//this.TeleportLight(this.m_ambientLightRef, AMBIENT_LIGHT_OFFSET);
+					}
+				}
+			}
+		}
+		else
+		{
+			this.DeleteAmbientLight();
+		}
+	}
 	void SetupFlashLight()
 	{
+		if(!g_bCanAnyoneSeeFlashLights)
+		{
+			this.DeleteFlashLight();
+			return;
+		}
+		
 		int weaponRef = GetEntPropEnt(this.m_client, Prop_Data, "m_hActiveWeapon");
 		if(weaponRef == INVALID_ENT_REFERENCE)
 		{
@@ -169,7 +277,7 @@ enum struct FlashLightData
 		{
 			if(this.MakeFlashLight())
 			{
-				this.TeleportLight();
+				this.TeleportLight(this.m_flashLightRef, LIGHT_OFFSET);
 			}
 		}
 		else
@@ -177,7 +285,7 @@ enum struct FlashLightData
 			this.DeleteFlashLight();
 		}
 	}
-	void TeleportLight()
+	void TeleportLight(int entity, float flOffset)
 	{
 		static float vecPos[3];
 		static float vecAng[3];
@@ -185,9 +293,9 @@ enum struct FlashLightData
 		GetClientEyePosition(this.m_client, vecPos);
 		GetClientEyeAngles(this.m_client, vecAng);
 		
-		OriginMove(vecPos, vecAng, vecPos, 20.0);
-		SetAbsOrigin(this.m_flashLightRef, vecPos);
-		SetAbsAngles(this.m_flashLightRef, vecAng);
+		OriginMove(vecPos, vecAng, vecPos, flOffset);
+		SetAbsOrigin(entity, vecPos);
+		SetAbsAngles(entity, vecAng);
 	}
 	void DeleteFlashLight()
 	{
@@ -196,13 +304,27 @@ enum struct FlashLightData
 			RemoveEntity(this.m_flashLightRef);
 		}
 	}
+	void DeleteAmbientLight()
+	{
+		this.m_ambientLastActiveWeaponRef = INVALID_ENT_REFERENCE;
+		
+		if(this.AmbientLightIsValid())
+		{
+			RemoveEntity(this.m_ambientLightRef);
+		}
+	}
 	bool FlashLightIsValid()
 	{
 		return IsValidEntRef(this.m_flashLightRef);
 	}
+	bool AmbientLightIsValid()
+	{
+		return IsValidEntRef(this.m_ambientLightRef);
+	}
 	void DeleteAllLights()
 	{
 		this.DeleteFlashLight();
+		this.DeleteAmbientLight();
 	}
 }
 
@@ -224,6 +346,8 @@ public void OnPluginStart()
 		if(IsClientInGame(i))
 			OnClientPutInServer(i);
 	}
+	
+	CreateTimer(0.1, LogicInterval, _, TIMER_REPEAT);
 }
 
 public void OnPluginEnd()
@@ -247,6 +371,7 @@ public void OnClientPutInServer(int client)
 public void OnClientDisconnect(int client)
 {
 	g_FlashLightData[client].DeleteAllLights();
+	g_FlashLightData[client].m_bShowFlashLights = false;
 }
 
 
@@ -256,19 +381,27 @@ public void DoLightStuff(int client)
 	int alive = IsPlayerAlive(client);
 	if(alive && (team == 2 || team == 4))
 	{
-		g_FlashLightData[client].SetupFlashLight();
+		g_FlashLightData[client].DoLighting();
 		return;
 	}
 	else
 	{
-		g_FlashLightData[client].DeleteAllLights();
+		g_FlashLightData[client].DeleteFlashLight();
 	}
 	
 	g_Spec[client] = -1;
 	if(alive || IsFakeClient(client) || GetEntProp(client, Prop_Send, "m_iObserverMode") != 4)
+	{
+		g_FlashLightData[client].DeleteAmbientLight();
 		return;
+	}
 	
 	g_Spec[client] = GetEntPropEnt(client, Prop_Send, "m_hObserverTarget");
+	
+	if(g_Spec[client] != -1)
+	{
+		g_FlashLightData[client].SetupAmbientLight(g_Spec[client]);
+	}
 }
 
 public Action HideFlashLightFromOwner(int entity, int client)
@@ -287,10 +420,27 @@ public Action HideFlashLightFromOwner(int entity, int client)
 	return Plugin_Continue;
 }
 
-public void OnGameFrame()
+public Action HideFlashLightFromOthers(int entity, int client)
+{
+	if(g_AmbientLightOwner[entity] == client)
+		return Plugin_Continue;
+	return Plugin_Handled;
+}
+
+public Action LogicInterval(Handle timer)
 {
 	if(!IsServerProcessing())
 		return;
+	
+	for(int i = 1; i <= MaxClients; ++i)
+	{
+		if(g_FlashLightData[i].m_bShowFlashLights)
+		{
+			g_bCanAnyoneSeeFlashLights = true;
+			break;
+		}
+		g_bCanAnyoneSeeFlashLights = false;
+	}
 	
 	static int client;
 	if(client > MaxClients || client < 1)
