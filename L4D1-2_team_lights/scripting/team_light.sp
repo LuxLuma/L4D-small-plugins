@@ -29,8 +29,9 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.9.0"
+#define PLUGIN_VERSION "0.9.1"
 
+#define AMBIENTLIGHT_USE_ATTACHMENT false
 #define DEBUG false
 
 
@@ -211,6 +212,7 @@ enum struct FlashLightData
 					SetVariantString("!activator");
 					AcceptEntityInput(this.m_ambientLightRef, "SetParent", viewModel);
 					
+					#if AMBIENTLIGHT_USE_ATTACHMENT
 					if(LookupAttachment(viewModel, "flashlight"))
 					{
 						SetVariantString("flashlight");
@@ -219,8 +221,11 @@ enum struct FlashLightData
 					else
 					{
 						TeleportEntity(this.m_ambientLightRef, view_as<float>({AMBIENT_LIGHT_OFFSET, 0.0, 0.0}), NULL_VECTOR, NULL_VECTOR);
-						//this.TeleportLight(this.m_ambientLightRef, AMBIENT_LIGHT_OFFSET);
 					}
+					#else
+					TeleportEntity(this.m_ambientLightRef, view_as<float>({AMBIENT_LIGHT_OFFSET, 0.0, 0.0}), NULL_VECTOR, NULL_VECTOR);
+					#endif
+					
 				}
 			}
 		}
