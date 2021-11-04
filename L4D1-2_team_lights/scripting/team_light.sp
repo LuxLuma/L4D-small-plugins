@@ -29,18 +29,19 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.8.2"
+#define PLUGIN_VERSION "0.9.0"
 
 #define DEBUG false
 
 
-#define COLOUR "5 5 5"
-#define BRIGHTNESS "5"
+#define COLOUR "7 7 7"
+#define BRIGHTNESS "3"
 #define INNER_CONE "1"
-#define OUTERCONE "22"
+#define OUTERCONE "15"
 #define SPOTLIGHT_RANGE 700.0
-#define SPOTLIGHT_SIZE 200.0
-#define LIGHT_OFFSET 20.0
+#define SPOTLIGHT_SIZE 150.0
+#define LIGHT_OFFSET 40.0
+#define LERP_TIME 0.1
 
 #define AMBIENT_COLOUR "50 50 50"
 #define AMBIENT_BRIGHTNESS "1"
@@ -58,6 +59,7 @@ public Plugin myinfo =
 	version = PLUGIN_VERSION,
 	url = "-"
 };
+
 
 
 enum
@@ -132,6 +134,10 @@ enum struct FlashLightData
 		DispatchSpawn(this.m_flashLightRef);
 		AcceptEntityInput(this.m_flashLightRef, "TurnOn");
 		
+		
+		SetNoLOSBlock(this.m_flashLightRef);
+		
+		
 		g_LightOwner[this.m_flashLightRef] = this.m_client;
 		this.m_flashLightRef = EntIndexToEntRef(this.m_flashLightRef);
 		SDKHook(this.m_flashLightRef, SDKHook_SetTransmit, HideFlashLightFromOwner);
@@ -149,19 +155,20 @@ enum struct FlashLightData
 		}
 		
 		DispatchKeyValue(this.m_ambientLightRef, "brightness", AMBIENT_BRIGHTNESS);
-		//DispatchKeyValueFloat(this.m_ambientLightRef, "spotlight_radius", SPOTLIGHT_SIZE);
+		
 		DispatchKeyValueFloat(this.m_ambientLightRef, "distance", AMBIENT_LIGHT_SIZE);
 		DispatchKeyValue(this.m_ambientLightRef, "style", "-1");
 		
 		DispatchKeyValue(this.m_ambientLightRef, "_light", AMBIENT_COLOUR);
 		
-		//DispatchKeyValue(this.m_ambientLightRef, "_inner_cone", INNER_CONE);
-		//DispatchKeyValue(this.m_ambientLightRef, "_cone", OUTERCONE);
-		
 		DispatchKeyValue(this.m_ambientLightRef, "spawnflags", "0");
 		
 		DispatchSpawn(this.m_ambientLightRef);
 		AcceptEntityInput(this.m_ambientLightRef, "TurnOn");
+		
+		
+		SetNoLOSBlock(this.m_ambientLightRef);
+		
 		
 		g_AmbientLightOwner[this.m_ambientLightRef] = this.m_client;
 		this.m_ambientLightRef = EntIndexToEntRef(this.m_ambientLightRef);
@@ -275,6 +282,7 @@ enum struct FlashLightData
 		if(this.m_bflashLightWeapon && (iFlags & EF_DIMLIGHT))
 		#endif
 		{
+			
 			if(this.MakeFlashLight())
 			{
 				this.TeleportLight(this.m_flashLightRef, LIGHT_OFFSET);
@@ -289,13 +297,24 @@ enum struct FlashLightData
 	{
 		static float vecPos[3];
 		static float vecAng[3];
+		static float vecOldPos[3];
+		static float vecOldAng[3];
+		
+		static float vecNewPos[3];
+		static float vecNewAng[3];
 		
 		GetClientEyePosition(this.m_client, vecPos);
 		GetClientEyeAngles(this.m_client, vecAng);
-		
 		OriginMove(vecPos, vecAng, vecPos, flOffset);
-		SetAbsOrigin(entity, vecPos);
-		SetAbsAngles(entity, vecAng);
+		
+		GetAbsOrigin(entity, vecOldPos);
+		GetEntPropVector(entity, Prop_Data, "m_angAbsRotation", vecOldAng);
+		
+		VectorLerp(vecOldPos, vecPos, LERP_TIME, vecNewPos);
+		VectorLerp(vecOldAng, vecAng, LERP_TIME, vecNewAng);
+		
+		
+		TeleportEntity(entity, vecPos, vecAng, NULL_VECTOR);
 	}
 	void DeleteFlashLight()
 	{
@@ -432,16 +451,6 @@ public Action LogicInterval(Handle timer)
 	if(!IsServerProcessing())
 		return;
 	
-	for(int i = 1; i <= MaxClients; ++i)
-	{
-		if(g_FlashLightData[i].m_bShowFlashLights)
-		{
-			g_bCanAnyoneSeeFlashLights = true;
-			break;
-		}
-		g_bCanAnyoneSeeFlashLights = false;
-	}
-	
 	static int client;
 	if(client > MaxClients || client < 1)
 		client = 1;
@@ -452,7 +461,7 @@ public Action LogicInterval(Handle timer)
 		{
 			char cookie[2];
 			g_CookieFlashLight.Get(client, cookie, sizeof(cookie));
-			g_FlashLightData[client].m_bShowFlashLights = view_as<bool>(StringToInt(cookie));// i'm lazy fuck off
+			g_FlashLightData[client].m_bShowFlashLights = view_as<bool>(StringToInt(cookie));
 		}
 		else
 		{
@@ -460,6 +469,16 @@ public Action LogicInterval(Handle timer)
 		}
 	}
 	++client;
+	
+	for(int i = 1; i <= MaxClients; ++i)
+	{
+		if(g_FlashLightData[i].m_bShowFlashLights)
+		{
+			g_bCanAnyoneSeeFlashLights = true;
+			break;
+		}
+		g_bCanAnyoneSeeFlashLights = false;
+	}
 }
 
 StringMap CreateNonFlashLightWeaponClassnameHashMap(StringMap hNonFlashLightWeaponClassnameHashMap)
@@ -523,4 +542,21 @@ stock void OriginMove(float fStartOrigin[3], float fStartAngles[3], float EndOri
 stock bool IsValidEntRef(int iEntRef)
 {
 	return (iEntRef != 0 && EntRefToEntIndex(iEntRef) != INVALID_ENT_REFERENCE);
+}
+
+#define EFL_DONTBLOCKLOS				(1<<25)
+stock void SetNoLOSBlock(int iEntity)
+{
+	int iFlags = GetEntProp(iEntity, Prop_Data, "m_iEFlags");
+	iFlags = iFlags |= EFL_DONTBLOCKLOS; //you never know with this game.
+	SetEntProp(iEntity, Prop_Data, "m_iEFlags", iFlags);
+}
+
+//Thanks Deathreus
+// Figure out a middle point between source and destination in the given time
+stock void VectorLerp(const float vec[3], const float dest[3], float time, float res[3])
+{
+    res[0] = vec[0] + (dest[0] - vec[0]) * time;
+    res[1] = vec[1] + (dest[1] - vec[1]) * time;
+    res[2] = vec[2] + (dest[2] - vec[2]) * time;
 }
