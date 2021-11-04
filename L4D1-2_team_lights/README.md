@@ -3,7 +3,7 @@
  ##### Extra Requirements
 
  - [ Lux_Library include to compile](https://github.com/LuxLuma/Lux-Library)
- -- Gamedata to use AMBIENTLIGHT_USE_ATTACHMENT of viewmodel
+ - Gamedata to use AMBIENTLIGHT_USE_ATTACHMENT of viewmodel
  
  
 #### team_light ambiant light preview
