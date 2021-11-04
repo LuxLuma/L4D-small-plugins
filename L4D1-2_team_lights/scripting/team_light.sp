@@ -426,6 +426,10 @@ public void DoLightStuff(int client)
 	{
 		g_FlashLightData[client].SetupAmbientLight(g_Spec[client]);
 	}
+	else //should not happen incase it does
+	{
+		g_FlashLightData[client].DeleteAmbientLight();
+	}
 }
 
 public Action HideFlashLightFromOwner(int entity, int client)
