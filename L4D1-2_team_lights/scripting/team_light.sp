@@ -205,7 +205,11 @@ enum struct FlashLightData
 			if(this.MakeAmbientLight())
 			{
 				int weaponRef = GetEntPropEnt(clientToCheck, Prop_Data, "m_hActiveWeapon");
-				weaponRef = EntIndexToEntRef(weaponRef);
+				if(weaponRef != INVALID_ENT_REFERENCE)
+				{
+					weaponRef = EntIndexToEntRef(weaponRef);
+				}
+				
 				if(this.m_ambientLastActiveWeaponRef != weaponRef)
 				{
 					this.m_ambientLastActiveWeaponRef = weaponRef;
