@@ -306,22 +306,10 @@ enum struct FlashLightData
 	{
 		static float vecPos[3];
 		static float vecAng[3];
-		static float vecOldPos[3];
-		static float vecOldAng[3];
-		
-		static float vecNewPos[3];
-		static float vecNewAng[3];
 		
 		GetClientEyePosition(this.m_client, vecPos);
 		GetClientEyeAngles(this.m_client, vecAng);
 		OriginMove(vecPos, vecAng, vecPos, flOffset);
-		
-		GetAbsOrigin(entity, vecOldPos);
-		GetEntPropVector(entity, Prop_Data, "m_angAbsRotation", vecOldAng);
-		
-		VectorLerp(vecOldPos, vecPos, LERP_TIME, vecNewPos);
-		VectorLerp(vecOldAng, vecAng, LERP_TIME, vecNewAng);
-		
 		
 		TeleportEntity(entity, vecPos, vecAng, NULL_VECTOR);
 	}
