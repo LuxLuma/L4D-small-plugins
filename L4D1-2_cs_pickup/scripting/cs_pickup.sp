@@ -57,7 +57,8 @@ enum struct WeaponData
 		if(this.m_WeaponType == WeaponSlotType_Unknown)
 			return;
 		
-		if(!IsValidEntRef(this.m_EntRef) || this.m_flIgnorePickup > GetGameTime())
+		float flGameTime = GetGameTime();
+		if(this.m_flIgnorePickup > flGameTime || !IsValidEntRef(this.m_EntRef))
 			return;
 		
 		if(!IsPlayerAlive(client) || GetClientTeam(client) != 2)
@@ -67,11 +68,17 @@ enum struct WeaponData
 		if(weaponIndex != -1)
 			return;
 		
+		if(GetEntPropEnt(this.m_Index, Prop_Send, "m_hOwnerEntity") != -1)
+		{
+			this.m_flIgnorePickup = flGameTime + 0.2;
+			return;
+		}
+		
 		AcceptEntityInput(this.m_Index, "use", client, client);
 	}
 	void ProcessWeaponDrop()
 	{
-		if(!IsValidEntRef(this.m_EntRef) || this.m_WeaponType != WeaponSlotType_Drugs)
+		if(this.m_WeaponType != WeaponSlotType_Drugs || !IsValidEntRef(this.m_EntRef))
 			return;
 		
 		this.m_flIgnorePickup = GetGameTime() + 2.0;// grabbing the pills you just tossed is fun :D
@@ -85,7 +92,7 @@ public Plugin myinfo =
 	name = "CS_pickup",
 	author = "Lux",
 	description = "Yes play cs",
-	version = "1.0",
+	version = "1.0.1",
 	url = "https://www.youtube.com/watch?v=UOlaEZg1hlc"
 };
 
