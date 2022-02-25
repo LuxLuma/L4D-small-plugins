@@ -190,7 +190,7 @@ StringMap CreateWeaponClassnameHashMap(StringMap hWeaponClassnameHashMap)
 	hWeaponClassnameHashMap.SetValue("weapon_pain_pills", WeaponSlotType_Drugs);
 	hWeaponClassnameHashMap.SetValue("weapon_vomitjar", WeaponSlotType_Throwable);
 	hWeaponClassnameHashMap.SetValue("weapon_adrenaline", WeaponSlotType_Drugs);
-	hWeaponClassnameHashMap.SetValue("weapon_chainsaw", WeaponSlotType_Main);
+	hWeaponClassnameHashMap.SetValue("weapon_chainsaw", WeaponSlotType_Second);
 	hWeaponClassnameHashMap.SetValue("weapon_defibrillator", WeaponSlotType_Medic);
 	hWeaponClassnameHashMap.SetValue("weapon_grenade_launcher", WeaponSlotType_Main);
 	hWeaponClassnameHashMap.SetValue("weapon_melee", WeaponSlotType_Second);
