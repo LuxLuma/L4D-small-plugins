@@ -6,10 +6,10 @@
 		{
 			"CTerrorWeapon::CanDeployFor__movetype_patch"
 			{
-				"signature"			"CTerrorWeapon::CanDeployFor"
+				"signature"			"CTerrorWeapon::CanDeploy"
 				"linux"
 				{
-					"offset"		"149"
+					"offset"		"161"
 					"verify"		"\x09"
 					"patch"			"\xFF"
 					
@@ -75,7 +75,7 @@
 		}
 		"Signatures"
 		{
-			"CTerrorWeapon::CanDeployFor"
+			"CTerrorWeapon::CanDeploy"
 			{
 				"library"	"server"
 				"linux"		"@_ZN13CTerrorWeapon9CanDeployEv"
