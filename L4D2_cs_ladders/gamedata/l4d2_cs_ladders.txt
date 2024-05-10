@@ -26,7 +26,7 @@
 				"signature"			"CTerrorPlayer::PreThink"
 				"linux"
 				{
-					"offset"		"161"
+					"offset"		"187"
 					"verify"		"\x09"
 					"patch"			"\xFF"
 					
@@ -43,9 +43,9 @@
 				"signature"			"CTerrorPlayer::OnLadderMount"
 				"linux"
 				{
-					"offset"		"73"
-					"verify"		"\x74"
-					"patch"			"\x90\x90" //nop
+					"offset"		"114"
+					"verify"		"\x0F\x84"
+					"patch"			"\x90\x90\x90\x90\x90\x90" //nop
 					
 				}
 				"windows"
@@ -60,9 +60,9 @@
 				"signature"			"CTerrorPlayer::OnLadderDismount"
 				"linux"
 				{
-					"offset"		"61"
-					"verify"		"\x8B\x10\x89\x04\x24\xFF\x92\xD4\x03\x00\x00"
-					"patch"			"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90" //lots of nops
+					"offset"		"32"
+					"verify"		"\74"
+					"patch"			"\x90\x90" //lots of nops
 					
 				}
 				"windows"
