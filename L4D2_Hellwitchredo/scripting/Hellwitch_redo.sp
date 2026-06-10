@@ -57,6 +57,9 @@ int g_iHPDivision_For_Spawning = 100;
 ConVar g_CvarMaxSlots_Reserve;
 int g_iMaxSlots_Reserve = 4; // don't spawn anything if there are this many slots left
 
+ConVar g_CvarAllowEscapeWitch_PortalCall;
+bool g_bAllowEscapeWitch_PortalCall;
+
 
 #define GREATERWITCH_PENTAGRAM_SIZE 96.0
 #define GREATERWITCH_PENTAGRAM_REDRAW_INTERVAL 15.0 //no above 20~
@@ -126,6 +129,7 @@ int g_iMaxSlots_Reserve = 4; // don't spawn anything if there are this many slot
 
 #define HELLWITCH_DEATHSOUND_FARAWAY ")npc/witch/voice/attack/female_distantscream1.wav"
 #define HELLWITCH_DEATHSOUND_FARAWAY_DIST 1000.0
+#define HELLWITCH_ESCAPE_PORTAL_CALL_VOL 3
 
 
 #define GREATER_ELECTRIC_EFFECT_MIN 0.2
@@ -361,12 +365,16 @@ enum struct HellSpawnWitch
 	int m_iPitch;
 	float m_flNextElectricTime;
 	bool m_bNonSpecialWitch;
+	bool m_bWasKilled;
+	bool m_bWasStartled;
 	
 	bool SetupHellCry(bool bDidOneShot)
 	{
 		if(!this.IsValidWitch())
 			return false;
-			
+		
+		this.m_bWasKilled = true;
+		
 		float vecOrigin[3];
 		GetAbsOrigin(this.m_iEntIndex, vecOrigin, true);
 		
@@ -439,6 +447,8 @@ enum struct HellSpawnWitch
 		this.m_iEntRef = EntIndexToEntRef(this.m_iEntIndex);
 		this.m_bGreaterHellWitch = false;
 		this.m_bNonSpecialWitch = false;
+		this.m_bWasKilled = false;
+		this.m_bWasStartled = false;
 		
 		if(bNonSpecialWitch)
 		{
@@ -1140,6 +1150,7 @@ public void OnPluginStart()
 	g_CvarHellMob_Spawn_Interval_WitchDeath = CreateConVar("hwr_hellmob_spawn_interval_witchdeath", "6.5", "time after with death non crown(1 shot) will next mob spawn, will bypass hwr_hellmob_spawn_interval", FCVAR_NOTIFY);
 	g_CvarHPDivision_For_Spawning = CreateConVar("hwr_hp_divison_for_spawning", "100", "divide total max hp of all surivors by this amount 4 survivors at 50hp = 2 special mobs spawning in a wave at value 100", FCVAR_NOTIFY, true, 1.0);
 	g_CvarMaxSlots_Reserve = CreateConVar("hwr_maxslots_reserve", "4", "how many client slots to reserve usually for going idle and player joining so a slot exists for them", FCVAR_NOTIFY);
+	g_CvarAllowEscapeWitch_PortalCall = CreateConVar("hwr_escaped_witch_portalcall", "1", "should we allow escaped witches to call for portal (non portal/non hell wave witches)", FCVAR_NOTIFY);
 	
 	g_CvarHellWave_Tanks_Max = CreateConVar("hwr_hellwave_tank_max", "1", "maximum tanks can spawn for a hellwave nonportal spawn", FCVAR_NOTIFY);
 	g_CvarHellWave_Chargers_Max = CreateConVar("hwr_hellwave_charger_max", "3", "maximum chargers can spawn for a hellwave nonportal spawn", FCVAR_NOTIFY);
@@ -1184,6 +1195,7 @@ public void OnPluginStart()
 	g_CvarHellMob_Spawn_Interval_WitchDeath.AddChangeHook(eConVarChanged);
 	g_CvarHPDivision_For_Spawning.AddChangeHook(eConVarChanged);
 	g_CvarMaxSlots_Reserve.AddChangeHook(eConVarChanged);
+	g_CvarAllowEscapeWitch_PortalCall.AddChangeHook(eConVarChanged);
 	
 	g_CvarHellWave_Tanks_Max.AddChangeHook(eConVarChanged);
 	g_CvarHellWave_Chargers_Max.AddChangeHook(eConVarChanged);
@@ -1233,6 +1245,7 @@ public void OnPluginStart()
 	--g_GreaterElectricSize;
 	HookEvent("witch_killed", WitchKilled);
 	HookEvent("witch_spawn", WitchSpawn);
+	HookEvent("witch_harasser_set", WitchStartle);
 	HookEvent("round_start", RoundStart);
 	HookEvent("player_spawn", PlayerSpawn);
 	
@@ -1447,6 +1460,54 @@ public void TimeOfDayRevert(int entity)
 	g_bIgnoreTimeOfDayChange = false;
 	SDKUnhook(entity, SDKHook_Think, TimeOfDayRevert);
 }
+
+public void WitchStartle(Event event, const char[] name, bool dontBroadcast)
+{
+	int witch = event.GetInt("witchid");
+	if(!IsValidEntity(witch))
+		return;
+	
+	g_HellSpawnWitch[witch].m_bWasStartled = true;
+}
+
+public void OnEntityDestroyed(int witch)
+{
+	if(!g_bAllowEscapeWitch_PortalCall)
+		return;
+	
+	if(witch <= MaxClients || witch > 2048)
+		return;
+	
+	if(!g_HellSpawnWitch[witch].IsValidWitch())
+		return;
+	
+	if(g_HellSpawnWitch[witch].m_bWasKilled)
+		return;
+	
+	if(!g_HellSpawnWitch[witch].m_bWasStartled)
+		return;
+	
+	if(g_HellSpawnWitch[witch].IsNonSpecialWitch())
+		return;
+	
+	int iPortal = CreateEntityByName("info_particle_system");
+	if(iPortal == -1)
+		return;
+	
+	DispatchKeyValue(iPortal, "effect_name", HELLPORTAL_FIRE);
+	DispatchSpawn(iPortal);
+	ActivateEntity(iPortal);
+	
+	float vecOrigin[3];
+	GetAbsOrigin(witch, vecOrigin);
+	TeleportEntity(iPortal, vecOrigin, NULL_VECTOR, NULL_VECTOR);
+	g_HellPortal[iPortal].InitPortal(vecOrigin);
+	
+	for(int i = 1; i <= HELLWITCH_ESCAPE_PORTAL_CALL_VOL; ++i)
+		EmitSoundToAll(HELLWITCH_DEATHSOUND_FARAWAY, SOUND_FROM_WORLD, SNDCHAN_STATIC, 120, _, _, 30, _, vecOrigin);
+	
+}
+
 
 public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
@@ -2447,6 +2508,7 @@ void CvarsChanged()
 	g_flHellMob_Spawn_Interval_WitchDeath = g_CvarHellMob_Spawn_Interval_WitchDeath.FloatValue;
 	g_iHPDivision_For_Spawning = g_CvarHPDivision_For_Spawning.IntValue;
 	g_iMaxSlots_Reserve = g_CvarMaxSlots_Reserve.IntValue;
+	g_bAllowEscapeWitch_PortalCall = g_CvarAllowEscapeWitch_PortalCall.BoolValue;
 	
 	g_flMinUpdate_TimeCvar = (g_flTickInterval >= g_CvarNB_Update_Interval.FloatValue ? g_flTickInterval : g_CvarNB_Update_Interval.FloatValue) * 4;
 	
