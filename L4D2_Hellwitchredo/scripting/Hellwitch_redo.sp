@@ -2628,29 +2628,12 @@ stock bool IsValidEntRef(int iEntRef)
 
 stock void ClientCheatCommand(int iClient, const char[] sArg1, const char sArg2[]="", const char sArg3[]="", const char sArg4[]="")
 {
-	if(IsFakeClient(iClient)) 
-	{
-		int iCommandFlags = GetCommandFlags(sArg1);
-		SetCommandFlags(sArg1, iCommandFlags & ~FCVAR_CHEAT);
-
-		FakeClientCommand(iClient, "%s %s %s %s", sArg1, sArg2, sArg3, sArg4);
-
-		SetCommandFlags(sArg1, iCommandFlags);
-	}
-	else 
-	{
-		int iUserFlags = GetUserFlagBits(iClient);
-		SetUserFlagBits(iClient, ADMFLAG_ROOT);
-
-		
-		int iCommandFlags = GetCommandFlags(sArg1);
-		SetCommandFlags(sArg1, iCommandFlags & ~FCVAR_CHEAT);
-
-		FakeClientCommand(iClient, "%s %s %s %s", sArg1, sArg2, sArg3, sArg4);
-
-		SetCommandFlags(sArg1, iCommandFlags);
-		SetUserFlagBits(iClient, iUserFlags);
-	}
+	int iCommandFlags = GetCommandFlags(sArg1);
+	SetCommandFlags(sArg1, iCommandFlags & ~FCVAR_CHEAT);
+	
+	FakeClientCommand(iClient, "%s %s %s %s", sArg1, sArg2, sArg3, sArg4);
+	
+	SetCommandFlags(sArg1, iCommandFlags);
 }
 
 //credit zero l4dstocks
