@@ -1,7 +1,8 @@
 # Hellwitchredo
+#### [Successor to L4D2 Hell Witch Crys](https://github.com/LuxLuma/-L4D2-Hell_Witch_Crys)
 
 ##### Extra Requirements
-- [Lux_Library include to compile](https://github.com/LuxLuma/Lux-Library)
+- [Lux_Library include to compile 0.5.9 and above](https://github.com/LuxLuma/Lux-Library)
 - [SMLib include to compile](https://github.com/bcserv/smlib/tree/transitional_syntax)
 
 #### Hellwitchredo preview media
