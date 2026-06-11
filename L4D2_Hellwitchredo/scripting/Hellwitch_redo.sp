@@ -1,5 +1,5 @@
 /**
-* Copyright (C) 2026  LuxLuma
+* Copyright (C) 2026 LuxLuma
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -340,6 +340,7 @@ int g_iCommonLimit = 100;
 
 
 float g_flTickInterval;
+bool g_bMapRunning;
 
 enum ZombieSpawns
 {
@@ -1355,7 +1356,14 @@ public void OnMapStart()
 	g_EmergeParticle = Precache_Particle_System(HELLPORTAL_EMERGE_PARTICLE);
 	g_AfterDustParticle = Precache_Particle_System(HELLPORTAL_AFTERDUST_PARTICLE);
 	Precache_Particle_System(HELLPORTAL_FIRE);
+	g_bMapRunning = true;
 }
+
+public void OnMapEnd()
+{
+	g_bMapRunning = false;
+}
+
 
 public void WitchKilled(Event event, const char[] name, bool dontBroadcast)
 {
@@ -1476,6 +1484,9 @@ public void OnEntityDestroyed(int witch)
 		return;
 	
 	if(witch <= MaxClients || witch > 2048)
+		return;
+	
+	if(!g_bMapRunning || !IsServerProcessing())
 		return;
 	
 	if(!g_HellSpawnWitch[witch].IsValidWitch())
