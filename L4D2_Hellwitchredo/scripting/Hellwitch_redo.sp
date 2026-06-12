@@ -1051,6 +1051,7 @@ enum struct HellSpawn
 		this.m_iUserID = GetClientUserId(this.m_client);
 		this.m_iPitch = GetRandomInt(HELLSPAWN_PITCH_LOWEST, HELLSPAWN_PITCH_HIGHEST);
 		this.m_bConvertFireHooked = SDKHookEx(this.m_client, SDKHook_OnTakeDamage, ConvertFireDamage);
+		this.m_bIsPortalSpawn = IsPortalSpawn;
 	}
 	void ClearHellSpawnData()
 	{
@@ -1711,7 +1712,8 @@ bool SpawnLowerHellMob(ZombieSpawns Type)
 	
 	g_bCatchSpawning = true;//catch spawning to spawn mobs in 1 place
 	
-	g_vecSpawnOriginHack = FLOAT_({0.0, 0.0, 0.0});// medic
+	static float vecNewCompilerYes[3] = {0.0, ...};
+	g_vecSpawnOriginHack = vecNewCompilerYes;// medic
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
@@ -2626,7 +2628,7 @@ stock bool IsValidEntRef(int iEntRef)
 	return (iEntRef != 0 && EntRefToEntIndex(iEntRef) != INVALID_ENT_REFERENCE);
 }
 
-stock void ClientCheatCommand(int iClient, const char[] sArg1, const char sArg2[]="", const char sArg3[]="", const char sArg4[]="")
+stock void ClientCheatCommand(int iClient, const char[] sArg1, const char[] sArg2="", const char[] sArg3="", const char[] sArg4="")
 {
 	int iCommandFlags = GetCommandFlags(sArg1);
 	SetCommandFlags(sArg1, iCommandFlags & ~FCVAR_CHEAT);
