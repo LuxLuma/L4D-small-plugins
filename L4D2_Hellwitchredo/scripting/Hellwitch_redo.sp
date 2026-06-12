@@ -2647,6 +2647,7 @@ stock void ClientCheatCommand(int iClient, const char[] sArg1, const char[] sArg
 * @error				Invalid client index or unable to find
 * 						pain_pills_decay_rate cvar.
 */
+#if !defined _l4d_stocks_included
 stock int L4D_GetPlayerTempHealth(int client)
 {
 	static Handle painPillsDecayCvar = INVALID_HANDLE;
@@ -2662,6 +2663,7 @@ stock int L4D_GetPlayerTempHealth(int client)
 	int tempHealth = RoundToCeil(GetEntPropFloat(client, Prop_Send, "m_healthBuffer") - ((GetGameTime() - GetEntPropFloat(client, Prop_Send, "m_healthBufferTime")) * GetConVarFloat(painPillsDecayCvar))) - 1;
 	return tempHealth < 0 ? 0 : tempHealth;
 }
+#endif
 
 stock void OriginMove(float fStartOrigin[3], float fStartAngles[3], float EndOrigin[3], float fDistance)
 {
