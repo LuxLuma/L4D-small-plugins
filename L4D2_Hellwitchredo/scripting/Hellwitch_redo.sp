@@ -1119,7 +1119,7 @@ public Plugin myinfo =
 	author = "Lux",
 	description = "Screams that come from hell.",
 	version = HWR_VERSION,
-	url = "-"
+	url = "https://forums.alliedmods.net/showthread.php?p=2844826"
 };
 
 public void OnPluginStart()
