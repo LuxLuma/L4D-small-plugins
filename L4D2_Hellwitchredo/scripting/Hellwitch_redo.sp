@@ -1712,8 +1712,7 @@ bool SpawnLowerHellMob(ZombieSpawns Type)
 	
 	g_bCatchSpawning = true;//catch spawning to spawn mobs in 1 place
 	
-	static float vecNewCompilerYes[3] = {0.0, ...};
-	g_vecSpawnOriginHack = vecNewCompilerYes;// medic
+	g_vecSpawnOriginHack = FLOAT_({0.0, 0.0, 0.0});// medic
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
