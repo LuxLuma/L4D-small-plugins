@@ -1444,9 +1444,10 @@ public void WitchSpawn(Event event, const char[] name, bool dontBroadcast)
 public Action WitchConvertToHellSpawn(Handle timer, int witchRef)
 {
 	if(!IsValidEntRef(witchRef))
-		return;
+		return Plugin_Stop;
 	
 	g_HellSpawnWitch[EntRefToEntIndex(witchRef)].InitWitch();
+	return Plugin_Stop;
 }
 
 public void GreaterElectric(int entity)
@@ -1692,6 +1693,7 @@ public Action SoulQueueDeath(Handle timer, DataPack dp)
 	
 	vecOrigin[2] -= 20.0;
 	PhysicsExplode(vecOrigin, 300, 30.0);
+	return Plugin_Stop;
 }
 
 bool SpawnLowerHellMob(ZombieSpawns Type)
@@ -1712,7 +1714,7 @@ bool SpawnLowerHellMob(ZombieSpawns Type)
 	
 	g_bCatchSpawning = true;//catch spawning to spawn mobs in 1 place
 	
-	g_vecSpawnOriginHack = FLOAT_({0.0, 0.0, 0.0});// medic
+	g_vecSpawnOriginHack = {0.0, 0.0, 0.0};// medic
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
