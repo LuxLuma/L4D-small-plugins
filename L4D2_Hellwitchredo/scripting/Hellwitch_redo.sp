@@ -2596,7 +2596,6 @@ public Action TriggerTankAttack(Handle timer, int iUserID)
 	GetAbsOrigin(client, vecPos, true);
 	
 	SetEntProp(client, Prop_Send, "m_hasVisibleThreats", 1, 1);
-	SetEntProp(client, Prop_Data, "m_iHealth", GetEntProp(client, Prop_Data, "m_iHealth") + 1);
 	Entity_Hurt(client, 0, GetTankTarget(), DMG_FULLGIB, _, vecPos);
 	return Plugin_Continue;
 }
