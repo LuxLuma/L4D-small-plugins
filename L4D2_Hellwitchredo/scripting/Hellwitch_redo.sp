@@ -32,6 +32,7 @@
 #define BOOL_(%1) view_as<bool>(%1)
 
 #define ZOMBIECLASS_TANK 8
+#define MAX_HELL_PORTALS 32
 
 ConVar g_CvarWitchPose;
 bool g_bWitchPose;
@@ -1112,7 +1113,38 @@ enum struct HellSpawnCommon
 HellSpawnWitch g_HellSpawnWitch[2048+1];
 HellSpawnCommon g_HellSpawnCommon[2048+1];
 HellSpawn g_HellSpawn[MAXPLAYERS+1];
-HellPortal g_HellPortal[2048+1]; //this is a shitty way of using memory for no reason FIXME or don't
+HellPortal g_HellPortal[MAX_HELL_PORTALS];
+int g_iPortalEntityIndex[MAX_HELL_PORTALS];
+
+int FindAvailablePortalSlot()
+{
+	for(int i = 0; i < MAX_HELL_PORTALS; ++i)
+	{
+		if(g_iPortalEntityIndex[i] == -1)
+			return i;
+	}
+	return -1; //No slots available
+}
+
+int FindPortalSlot(int iEntityIndex)
+{
+	for(int i = 0; i < MAX_HELL_PORTALS; ++i)
+	{
+		if(g_iPortalEntityIndex[i] == iEntityIndex)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void FreePortalSlot(int iSlot)
+{
+	if(iSlot >= 0 && iSlot < MAX_HELL_PORTALS)
+	{
+		g_iPortalEntityIndex[iSlot] = -1;
+	}
+}
 
 public Plugin myinfo =
 {
@@ -1235,11 +1267,14 @@ public void OnPluginStart()
 	{
 		g_HellSpawnWitch[i].m_iEntIndex = i;
 		g_HellSpawnCommon[i].m_iEntIndex = i;
-		g_HellPortal[i].m_iEntIndex = i;
 	}
 	for(int i; i <= MAXPLAYERS; ++i)
 	{
 		g_HellSpawn[i].m_client = i;
+	}
+	for(int i = 0; i < MAX_HELL_PORTALS; ++i)
+	{
+		g_iPortalEntityIndex[i] = -1;
 	}
 	
 	--g_OneShotDeathCrySize;
@@ -1376,10 +1411,15 @@ public void WitchKilled(Event event, const char[] name, bool dontBroadcast)
 	
 	if(g_HellSpawnWitch[witch].SetupHellCry(bDidOneShot))
 	{
+		int iSlot = FindAvailablePortalSlot();
+		if(iSlot == -1)
+			return; //No portal slots available
+		
 		int iPortal = CreateEntityByName("info_particle_system");
 		if(iPortal == -1)
-			return;
+			return; //Entity creation failed
 		
+		g_iPortalEntityIndex[iSlot] = iPortal; //Allocate slot to entity
 		DispatchKeyValue(iPortal, "effect_name", HELLPORTAL_FIRE);
 		DispatchSpawn(iPortal);
 		ActivateEntity(iPortal);
@@ -1387,7 +1427,8 @@ public void WitchKilled(Event event, const char[] name, bool dontBroadcast)
 		float vecOrigin[3];
 		GetAbsOrigin(witch, vecOrigin);
 		TeleportEntity(iPortal, vecOrigin, NULL_VECTOR, NULL_VECTOR);
-		g_HellPortal[iPortal].InitPortal(vecOrigin);
+		g_HellPortal[iSlot].m_iEntIndex = iPortal;
+		g_HellPortal[iSlot].InitPortal(vecOrigin);
 	}
 }
 
@@ -1503,10 +1544,15 @@ public void OnEntityDestroyed(int witch)
 	if(g_HellSpawnWitch[witch].IsNonSpecialWitch())
 		return;
 	
+	int iSlot = FindAvailablePortalSlot();
+	if(iSlot == -1)
+		return; //No portal slots available
+	
 	int iPortal = CreateEntityByName("info_particle_system");
 	if(iPortal == -1)
-		return;
+		return; //Entity creation failed
 	
+	g_iPortalEntityIndex[iSlot] = iPortal; //Allocate slot to entity
 	DispatchKeyValue(iPortal, "effect_name", HELLPORTAL_FIRE);
 	DispatchSpawn(iPortal);
 	ActivateEntity(iPortal);
@@ -1514,7 +1560,8 @@ public void OnEntityDestroyed(int witch)
 	float vecOrigin[3];
 	GetAbsOrigin(witch, vecOrigin);
 	TeleportEntity(iPortal, vecOrigin, NULL_VECTOR, NULL_VECTOR);
-	g_HellPortal[iPortal].InitPortal(vecOrigin);
+	g_HellPortal[iSlot].m_iEntIndex = iPortal;
+	g_HellPortal[iSlot].InitPortal(vecOrigin);
 	
 	for(int i = 1; i <= HELLWITCH_ESCAPE_PORTAL_CALL_VOL; ++i)
 		EmitSoundToAll(HELLWITCH_DEATHSOUND_FARAWAY, SOUND_FROM_WORLD, SNDCHAN_STATIC, 120, _, _, 30, _, vecOrigin);
@@ -1664,9 +1711,17 @@ public void HellPortalLogic(int iEntRef)
 		return;
 	
 	int iPortal = EntRefToEntIndex(iEntRef);
-	if(g_HellPortal[iPortal].PortalLogic())
+	int iSlot = FindPortalSlot(iPortal);
+	if(iSlot == -1)
+		return; //Portal slot not found
+	
+	if(g_HellPortal[iSlot].PortalLogic())
 	{
 		RequestFrame(HellPortalLogic, iEntRef);
+	}
+	else
+	{
+		FreePortalSlot(iSlot);
 	}
 }
 
@@ -1857,6 +1912,10 @@ bool SpawnLowerHellMob(ZombieSpawns Type)
 
 bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 {
+	int iSlot = FindPortalSlot(iPortalIndex);
+	if(iSlot == -1)
+		return false; //Portal slot not found
+	
 	int client = GetAnyoneInGame();
 	if(client < 1)
 		return false;
@@ -1874,7 +1933,7 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 	g_bCatchSpawning = true;//catch spawning to spawn mobs in 1 place
 	g_iHellPortalSpawnAmount = 0;
 	
-	g_vecSpawnOriginHack = g_HellPortal[iPortalIndex].m_vecOrigin;// i don't care
+	g_vecSpawnOriginHack = g_HellPortal[iSlot].m_vecOrigin;// i don't care
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
@@ -1886,8 +1945,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iTanks < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iTanks;
+			if(g_HellPortal[iSlot].m_iTanks < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iTanks;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1903,8 +1962,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iSmokers < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iSmokers;
+			if(g_HellPortal[iSlot].m_iSmokers < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iSmokers;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1920,8 +1979,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iBoomers < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iBoomers;
+			if(g_HellPortal[iSlot].m_iBoomers < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iBoomers;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1937,8 +1996,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iHunters < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iHunters;
+			if(g_HellPortal[iSlot].m_iHunters < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iHunters;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1954,8 +2013,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iJockeys < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iJockeys;
+			if(g_HellPortal[iSlot].m_iJockeys < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iJockeys;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1971,8 +2030,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iChargers < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iChargers;
+			if(g_HellPortal[iSlot].m_iChargers < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iChargers;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -1985,8 +2044,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iTotalHp < 1)
 				iTotalHp = 1;
 			
-			if(g_HellPortal[iPortalIndex].m_iWitches < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iWitches;
+			if(g_HellPortal[iSlot].m_iWitches < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iWitches;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -2002,8 +2061,8 @@ bool SpawnPortalMob(ZombieSpawns Type, int iPortalIndex)
 			if(iFreeSlots < iTotalHp)
 				iTotalHp = iFreeSlots;
 			
-			if(g_HellPortal[iPortalIndex].m_iSpitters < iTotalHp)
-				iTotalHp = g_HellPortal[iPortalIndex].m_iSpitters;
+			if(g_HellPortal[iSlot].m_iSpitters < iTotalHp)
+				iTotalHp = g_HellPortal[iSlot].m_iSpitters;
 			
 			for(int i; i < iTotalHp; ++i)
 			{
@@ -2113,9 +2172,9 @@ bool IsCommon(int iEntity)
 
 bool AnyPortalsExist()
 {
-	for(int i = MaxClients+1; i <= 2048; ++i)
+	for(int i = 0; i < MAX_HELL_PORTALS; ++i)
 	{
-		if(g_HellPortal[i].IsValidPortal())
+		if(g_iPortalEntityIndex[i] != -1 && g_HellPortal[i].IsValidPortal())
 			return true;
 	}
 	return false;
