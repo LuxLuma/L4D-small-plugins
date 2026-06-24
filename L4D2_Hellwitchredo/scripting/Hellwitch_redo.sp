@@ -150,6 +150,8 @@ char LHSSpitterSounds[][] =
 #define HELLWITCH_DEATHSOUND_FARAWAY_DIST 1000.0
 #define HELLWITCH_ESCAPE_PORTAL_CALL_VOL 3
 
+#define HELLWITCH_LOWERHELLMOB_SND ")npc/witch/voice/attack/female_shriek_2.wav"
+
 
 #define GREATER_ELECTRIC_EFFECT_MIN 0.2
 #define GREATER_ELECTRIC_EFFECT_MAX 0.5
@@ -1371,6 +1373,7 @@ public void OnMapStart()
 	
 	PrecacheSound(HELLWITCH_DEATHSOUND_1, true);
 	PrecacheSound(HELLWITCH_DEATHSOUND_FARAWAY, true);
+	PrecacheSound(HELLWITCH_LOWERHELLMOB_SND, true);
 	
 	PrecacheSound(GREATER_WITCH_DEATH_SND, true);
 	PrecacheSound(HELLPORTAL_EMERGE_SND, true);
@@ -1625,8 +1628,6 @@ public void OnEntityCreated(int entity, const char[] classname)
 		}
 	}
 }
-
-
 
 public void RoundStart(Event event, const char[] name, bool dontBroadcast)
 {
@@ -2215,6 +2216,10 @@ void EmitLowerHellSpawn_SFK(ZombieSpawns Type)
 		case ZombieSpawns_Spitter:
 		{
 			EmitSoundToAll(LHSSpitterSounds[GetRandomInt(0, sizeof(LHSSpitterSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+		}
+		case ZombieSpawns_Witch:
+		{
+			EmitSoundToAll(HELLWITCH_LOWERHELLMOB_SND, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 		}
 		default:
 		{
