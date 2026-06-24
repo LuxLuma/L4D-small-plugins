@@ -25,7 +25,7 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-#define HWR_VERSION "1.7"
+#define HWR_VERSION "1.8"
 
 #define FLOAT_(%1) view_as<float>(%1)
 #define INT_(%1) view_as<int>(%1)
