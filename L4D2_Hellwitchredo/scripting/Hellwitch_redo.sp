@@ -71,7 +71,9 @@ bool g_bAllowEscapeWitch_PortalCall;
 #define GREATERWITCH_PITCH_LOWEST 70
 #define GREATERWITCH_PITCH_HIGHEST 75
 
-char LHSTankSounds[][] =
+#define LOWER_HELLSPAWN_SOUNDS_MAX 3
+
+char LHSTankSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/tank/voice/attack/tank_attack_01.wav",
 	")player/tank/voice/attack/tank_attack_02.wav",
@@ -83,7 +85,7 @@ char LHSTankSounds[][] =
 	")player/tank/voice/pain/tank_fire_06.wav"
 };
 
-char LHSBoomerSounds[][] =
+char LHSBoomerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/boomer/voice/warn/male_boomer_warning_01.wav",
 	")player/boomer/voice/warn/male_boomer_warning_12.wav",
@@ -95,7 +97,7 @@ char LHSBoomerSounds[][] =
 	")player/boomer/voice/warn/female_boomer_warning_17.wav"
 };
 
-char LHSSmokerSounds[][] =
+char LHSSmokerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/smoker/voice/warn/smoker_warn_01.wav",
 	")player/smoker/voice/warn/smoker_warn_03.wav",
@@ -104,7 +106,7 @@ char LHSSmokerSounds[][] =
 	")player/smoker/voice/warn/smoker_warn_06.wav"
 };
 
-char LHSHunterSounds[][] =
+char LHSHunterSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/hunter/voice/warn/hunter_warn_10.wav",
 	")player/hunter/voice/warn/hunter_warn_14.wav",
@@ -113,7 +115,7 @@ char LHSHunterSounds[][] =
 	")player/hunter/voice/warn/hunter_warn_18.wav"
 };
 
-char LHSJockeySounds[][] =
+char LHSJockeySounds[][PLATFORM_MAX_PATH] =
 {
 	")player/jockey/voice/alert/jockey_02.wav",
 	")player/jockey/voice/alert/jockey_04.wav",
@@ -122,7 +124,7 @@ char LHSJockeySounds[][] =
 	")player/jockey/voice/idle/jockey_lurk06.wav"
 };
 
-char LHSChargerSounds[][] =
+char LHSChargerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/charger/voice/alert/charger_alert_01.wav",
 	")player/charger/voice/alert/charger_alert_02.wav",
@@ -131,7 +133,7 @@ char LHSChargerSounds[][] =
 	")player/charger/voice/attack/charger_melee01.wav"
 };
 
-char LHSSpitterSounds[][] =
+char LHSSpitterSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/spitter/voice/idle/spitter_spotprey_01.wav",
 	")player/spitter/voice/idle/spitter_spotprey_02.wav",
@@ -2055,52 +2057,67 @@ bool AnyPortalsExist()
 
 void EmitLowerHellSpawn_SFK(ZombieSpawns Type)
 {
+	char sSound[PLATFORM_MAX_PATH];
+	int iPitch;
+
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
 		{
 			int iRng = GetRandomInt(0, sizeof(LHSTankSounds) - 1);
+			sSound = LHSTankSounds[iRng];
 			if(iRng == 6 || iRng == 7)
 			{
-				EmitSoundToAll(LHSTankSounds[iRng], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 80, _, g_vecSpawnOriginHack);
+				iPitch = 80;
 			}
 			else
 			{
-				EmitSoundToAll(LHSTankSounds[iRng], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+				iPitch = 60;
 			}
 		}
 		case ZombieSpawns_Boomer:
 		{
-			EmitSoundToAll(LHSBoomerSounds[GetRandomInt(0, sizeof(LHSBoomerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSBoomerSounds[GetRandomInt(0, sizeof(LHSBoomerSounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Smoker:
 		{
-			EmitSoundToAll(LHSSmokerSounds[GetRandomInt(0, sizeof(LHSSmokerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSSmokerSounds[GetRandomInt(0, sizeof(LHSSmokerSounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Hunter:
 		{
-			EmitSoundToAll(LHSHunterSounds[GetRandomInt(0, sizeof(LHSHunterSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSHunterSounds[GetRandomInt(0, sizeof(LHSHunterSounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Jockey:
 		{
-			EmitSoundToAll(LHSJockeySounds[GetRandomInt(0, sizeof(LHSJockeySounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSJockeySounds[GetRandomInt(0, sizeof(LHSJockeySounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Charger:
 		{
-			EmitSoundToAll(LHSChargerSounds[GetRandomInt(0, sizeof(LHSChargerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSChargerSounds[GetRandomInt(0, sizeof(LHSChargerSounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Spitter:
 		{
-			EmitSoundToAll(LHSSpitterSounds[GetRandomInt(0, sizeof(LHSSpitterSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = LHSSpitterSounds[GetRandomInt(0, sizeof(LHSSpitterSounds) - 1)];
+			iPitch = 60;
 		}
 		case ZombieSpawns_Witch:
 		{
-			EmitSoundToAll(HELLWITCH_LOWERHELLMOB_SND, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+			sSound = HELLWITCH_LOWERHELLMOB_SND;
+			iPitch = 60;
 		}
 		default:
 		{
 			return;
 		}
+	}
+	for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
+	{
+		EmitSoundToAll(sSound, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, iPitch, _, g_vecSpawnOriginHack);
 	}
 }
 
