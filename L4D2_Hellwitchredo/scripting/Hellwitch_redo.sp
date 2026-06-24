@@ -71,57 +71,75 @@ bool g_bAllowEscapeWitch_PortalCall;
 #define GREATERWITCH_PITCH_LOWEST 70
 #define GREATERWITCH_PITCH_HIGHEST 75
 
-#define LOWER_HELLSPAWN_SOUNDS_MAX 3
+char LHSTankSounds[][] =
+{
+	")player/tank/voice/attack/tank_attack_01.wav",
+	")player/tank/voice/attack/tank_attack_02.wav",
+	")player/tank/voice/attack/tank_attack_05.wav",
+	")player/tank/voice/attack/tank_attack_08.wav",
+	")player/tank/voice/die/tank_death_01.wav",
+	")player/tank/voice/growl/tank_climb_01.wav",
+	")player/tank/voice/yell/tank_yell_02.wav",
+	")player/tank/voice/pain/tank_fire_06.wav"
+};
 
+char LHSBoomerSounds[][] =
+{
+	")player/boomer/voice/warn/male_boomer_warning_01.wav",
+	")player/boomer/voice/warn/male_boomer_warning_12.wav",
+	")player/boomer/voice/warn/male_boomer_warning_13.wav",
+	")player/boomer/voice/warn/male_boomer_warning_14.wav",
+	")player/boomer/voice/warn/male_boomer_warning_15.wav",
+	")player/boomer/voice/warn/male_boomer_warning_16.wav",
+	")player/boomer/voice/warn/male_boomer_warning_17.wav",
+	")player/boomer/voice/warn/female_boomer_warning_17.wav"
+};
 
-#define LOWER_HELLSPAWN_TANK_SND_1 ")player/tank/voice/attack/tank_attack_01.wav"
-#define LOWER_HELLSPAWN_TANK_SND_2 ")player/tank/voice/attack/tank_attack_02.wav"
-#define LOWER_HELLSPAWN_TANK_SND_3 ")player/tank/voice/attack/tank_attack_05.wav"
-#define LOWER_HELLSPAWN_TANK_SND_4 ")player/tank/voice/attack/tank_attack_08.wav"
-#define LOWER_HELLSPAWN_TANK_SND_5 ")player/tank/voice/die/tank_death_01.wav"
-#define LOWER_HELLSPAWN_TANK_SND_6 ")player/tank/voice/growl/tank_climb_01.wav"
-#define LOWER_HELLSPAWN_TANK_SND_7 ")player/tank/voice/yell/tank_yell_02.wav"
-#define LOWER_HELLSPAWN_TANK_SND_8 ")player/tank/voice/pain/tank_fire_06.wav"
+char LHSSmokerSounds[][] =
+{
+	")player/smoker/voice/warn/smoker_warn_01.wav",
+	")player/smoker/voice/warn/smoker_warn_03.wav",
+	")player/smoker/voice/warn/smoker_warn_04.wav",
+	")player/smoker/voice/warn/smoker_warn_05.wav",
+	")player/smoker/voice/warn/smoker_warn_06.wav"
+};
 
-#define LOWER_HELLSPAWN_BOOMER_SND_1 ")player/boomer/voice/warn/male_boomer_warning_01.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_2 ")player/boomer/voice/warn/male_boomer_warning_12.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_3 ")player/boomer/voice/warn/male_boomer_warning_13.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_4 ")player/boomer/voice/warn/male_boomer_warning_14.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_5 ")player/boomer/voice/warn/male_boomer_warning_15.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_6 ")player/boomer/voice/warn/male_boomer_warning_16.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_7 ")player/boomer/voice/warn/male_boomer_warning_17.wav"
-#define LOWER_HELLSPAWN_BOOMER_SND_8 ")player/boomer/voice/warn/female_boomer_warning_17.wav"
+char LHSHunterSounds[][] =
+{
+	")player/hunter/voice/warn/hunter_warn_10.wav",
+	")player/hunter/voice/warn/hunter_warn_14.wav",
+	")player/hunter/voice/warn/hunter_warn_16.wav",
+	")player/hunter/voice/warn/hunter_warn_17.wav",
+	")player/hunter/voice/warn/hunter_warn_18.wav"
+};
 
-#define LOWER_HELLSPAWN_SMOKER_SND_1 ")player/smoker/voice/warn/smoker_warn_01.wav"
-#define LOWER_HELLSPAWN_SMOKER_SND_2 ")player/smoker/voice/warn/smoker_warn_03.wav"
-#define LOWER_HELLSPAWN_SMOKER_SND_3 ")player/smoker/voice/warn/smoker_warn_04.wav"
-#define LOWER_HELLSPAWN_SMOKER_SND_4 ")player/smoker/voice/warn/smoker_warn_05.wav"
-#define LOWER_HELLSPAWN_SMOKER_SND_5 ")player/smoker/voice/warn/smoker_warn_06.wav"
+char LHSJockeySounds[][] =
+{
+	")player/jockey/voice/alert/jockey_02.wav",
+	")player/jockey/voice/alert/jockey_04.wav",
+	")player/jockey/voice/warn/jockey_06.wav",
+	")player/jockey/voice/idle/jockey_lurk03.wav",
+	")player/jockey/voice/idle/jockey_lurk06.wav"
+};
 
-#define LOWER_HELLSPAWN_HUNTER_SND_1 ")player/hunter/voice/warn/hunter_warn_10.wav"
-#define LOWER_HELLSPAWN_HUNTER_SND_2 ")player/hunter/voice/warn/hunter_warn_14.wav"
-#define LOWER_HELLSPAWN_HUNTER_SND_3 ")player/hunter/voice/warn/hunter_warn_16.wav"
-#define LOWER_HELLSPAWN_HUNTER_SND_4 ")player/hunter/voice/warn/hunter_warn_17.wav"
-#define LOWER_HELLSPAWN_HUNTER_SND_5 ")player/hunter/voice/warn/hunter_warn_18.wav"
+char LHSChargerSounds[][] =
+{
+	")player/charger/voice/alert/charger_alert_01.wav",
+	")player/charger/voice/alert/charger_alert_02.wav",
+	")player/charger/voice/warn/charger_warn_03.wav",
+	")player/charger/voice/idle/charger_spotprey_03.wav",
+	")player/charger/voice/attack/charger_melee01.wav"
+};
 
-#define LOWER_HELLSPAWN_JOCKEY_SND_1 ")player/jockey/voice/alert/jockey_02.wav"
-#define LOWER_HELLSPAWN_JOCKEY_SND_2 ")player/jockey/voice/alert/jockey_04.wav"
-#define LOWER_HELLSPAWN_JOCKEY_SND_3 ")player/jockey/voice/warn/jockey_06.wav"
-#define LOWER_HELLSPAWN_JOCKEY_SND_4 ")player/jockey/voice/idle/jockey_lurk03.wav"
-#define LOWER_HELLSPAWN_JOCKEY_SND_5 ")player/jockey/voice/idle/jockey_lurk06.wav"
-
-#define LOWER_HELLSPAWN_CHARGER_SND_1 ")player/charger/voice/alert/charger_alert_01.wav"
-#define LOWER_HELLSPAWN_CHARGER_SND_2 ")player/charger/voice/alert/charger_alert_02.wav"
-#define LOWER_HELLSPAWN_CHARGER_SND_3 ")player/charger/voice/warn/charger_warn_03.wav"
-#define LOWER_HELLSPAWN_CHARGER_SND_4 ")player/charger/voice/idle/charger_spotprey_03.wav"
-#define LOWER_HELLSPAWN_CHARGER_SND_5 ")player/charger/voice/attack/charger_melee01.wav"
-
-#define LOWER_HELLSPAWN_SPITTER_SND_1 ")player/spitter/voice/idle/spitter_spotprey_01.wav"
-#define LOWER_HELLSPAWN_SPITTER_SND_2 ")player/spitter/voice/idle/spitter_spotprey_02.wav"
-#define LOWER_HELLSPAWN_SPITTER_SND_3 ")player/spitter/voice/idle/spitter_spotprey_03.wav"
-#define LOWER_HELLSPAWN_SPITTER_SND_4 ")player/spitter/voice/idle/spitter_spotprey_04.wav"
-#define LOWER_HELLSPAWN_SPITTER_SND_5 ")player/spitter/voice/idle/spitter_spotprey_05.wav"
-#define LOWER_HELLSPAWN_SPITTER_SND_6 ")player/spitter/voice/idle/spitter_spotprey_06.wav"
+char LHSSpitterSounds[][] =
+{
+	")player/spitter/voice/idle/spitter_spotprey_01.wav",
+	")player/spitter/voice/idle/spitter_spotprey_02.wav",
+	")player/spitter/voice/idle/spitter_spotprey_03.wav",
+	")player/spitter/voice/idle/spitter_spotprey_04.wav",
+	")player/spitter/voice/idle/spitter_spotprey_05.wav",
+	")player/spitter/voice/idle/spitter_spotprey_06.wav"
+};
 
 #define HELLWITCH_DEATHSOUND_MAX 1
 #define HELLWITCH_DEATHSOUND_FAR_MAX 2
@@ -1322,56 +1340,34 @@ public void OnMapStart()
 	{
 		PrecacheSound(g_sGreaterElectric[i], true);
 	}
-	
-	//yes this could be an array but who else is looking
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_5, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_6, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_7, true);
-	PrecacheSound(LOWER_HELLSPAWN_TANK_SND_8, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_5, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_6, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_7, true);
-	PrecacheSound(LOWER_HELLSPAWN_BOOMER_SND_8, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_SMOKER_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_SMOKER_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_SMOKER_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_SMOKER_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_SMOKER_SND_5, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_HUNTER_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_HUNTER_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_HUNTER_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_HUNTER_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_HUNTER_SND_5, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_JOCKEY_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_JOCKEY_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_JOCKEY_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_JOCKEY_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_JOCKEY_SND_5, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_CHARGER_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_CHARGER_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_CHARGER_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_CHARGER_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_CHARGER_SND_5, true);
-	
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_1, true);
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_2, true);
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_3, true);
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_4, true);
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_5, true);
-	PrecacheSound(LOWER_HELLSPAWN_SPITTER_SND_6, true);
+	for(int i; i < sizeof(LHSTankSounds); ++i)
+	{
+		PrecacheSound(LHSTankSounds[i], true);
+	}
+	for(int i; i < sizeof(LHSBoomerSounds); ++i)
+	{
+		PrecacheSound(LHSBoomerSounds[i], true);
+	}	
+	for(int i; i < sizeof(LHSSmokerSounds); ++i)
+	{
+		PrecacheSound(LHSSmokerSounds[i], true);
+	}
+	for(int i; i < sizeof(LHSHunterSounds); ++i)
+	{
+		PrecacheSound(LHSHunterSounds[i], true);
+	}
+	for(int i; i < sizeof(LHSJockeySounds); ++i)
+	{
+		PrecacheSound(LHSJockeySounds[i], true);
+	}
+	for(int i; i < sizeof(LHSChargerSounds); ++i)
+	{
+		PrecacheSound(LHSChargerSounds[i], true);
+	}
+	for(int i; i < sizeof(LHSSpitterSounds); ++i)
+	{
+		PrecacheSound(LHSSpitterSounds[i], true);
+	}
 	
 	PrecacheSound(HELLWITCH_DEATHSOUND_1, true);
 	PrecacheSound(HELLWITCH_DEATHSOUND_FARAWAY, true);
@@ -2180,262 +2176,49 @@ bool AnyPortalsExist()
 	return false;
 }
 
-//yes i know it's shit you fix it
 void EmitLowerHellSpawn_SFK(ZombieSpawns Type)
 {
 	switch(Type)
 	{
 		case ZombieSpawns_Tank:
 		{
-			switch(GetRandomInt(1, 8))
+			int iRng = GetRandomInt(0, sizeof(LHSTankSounds) - 1);
+			if(iRng == 6 || iRng == 7)
 			{
-				case 1:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 6:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_6, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 7:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_7, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 80, _, g_vecSpawnOriginHack);
-				}
-				case 8:
-				{
-					for(int i; i <= LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_TANK_SND_8, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 80, _, g_vecSpawnOriginHack);
-				}
+				EmitSoundToAll(LHSTankSounds[iRng], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 80, _, g_vecSpawnOriginHack);
 			}
-		}
-		case ZombieSpawns_Smoker:
-		{
-			switch(GetRandomInt(1, 5))
+			else
 			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SMOKER_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SMOKER_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SMOKER_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SMOKER_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SMOKER_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
+				EmitSoundToAll(LHSTankSounds[iRng], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 			}
 		}
 		case ZombieSpawns_Boomer:
 		{
-			switch(GetRandomInt(1, 8))
-			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 6:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_6, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 7:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_7, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 8:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_BOOMER_SND_8, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 50, _, g_vecSpawnOriginHack);
-				}
-			}
+			EmitSoundToAll(LHSBoomerSounds[GetRandomInt(0, sizeof(LHSBoomerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+		}
+		case ZombieSpawns_Smoker:
+		{
+			EmitSoundToAll(LHSSmokerSounds[GetRandomInt(0, sizeof(LHSSmokerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 		}
 		case ZombieSpawns_Hunter:
 		{
-			switch(GetRandomInt(1, 5))
-			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_HUNTER_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_HUNTER_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_HUNTER_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_HUNTER_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_HUNTER_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-			}
+			EmitSoundToAll(LHSHunterSounds[GetRandomInt(0, sizeof(LHSHunterSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 		}
 		case ZombieSpawns_Jockey:
 		{
-			switch(GetRandomInt(1, 5))
-			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_JOCKEY_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_JOCKEY_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_JOCKEY_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_JOCKEY_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_JOCKEY_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-			}
+			EmitSoundToAll(LHSJockeySounds[GetRandomInt(0, sizeof(LHSJockeySounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 		}
 		case ZombieSpawns_Charger:
 		{
-			switch(GetRandomInt(1, 5))
-			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_CHARGER_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_CHARGER_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_CHARGER_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_CHARGER_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_CHARGER_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-			}
+			EmitSoundToAll(LHSChargerSounds[GetRandomInt(0, sizeof(LHSChargerSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
 		}
 		case ZombieSpawns_Spitter:
 		{
-			switch(GetRandomInt(1, 6))
-			{
-				case 1:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_1, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 2:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_2, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 3:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_3, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 4:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_4, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 5:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_5, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-				case 6:
-				{
-					for(int i; i < LOWER_HELLSPAWN_SOUNDS_MAX; ++i)
-						EmitSoundToAll(LOWER_HELLSPAWN_SPITTER_SND_6, SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
-				}
-			}
+			EmitSoundToAll(LHSSpitterSounds[GetRandomInt(0, sizeof(LHSSpitterSounds) - 1)], SOUND_FROM_WORLD, SNDCHAN_STATIC, 140, _, _, 60, _, g_vecSpawnOriginHack);
+		}
+		default:
+		{
+			return;
 		}
 	}
 }
