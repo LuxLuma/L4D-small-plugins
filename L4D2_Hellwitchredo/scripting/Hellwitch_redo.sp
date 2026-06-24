@@ -572,79 +572,19 @@ enum struct HellSpawnWitch
 	}
 	ZombieSpawns PickRandomSpecial()
 	{
-		int MaxRetry;
-		ZombieSpawns SpawnType = ZombieSpawns_None;
-		while(SpawnType == ZombieSpawns_None)
-		{
-			++MaxRetry;
-			
-			SpawnType = view_as<ZombieSpawns>(GetRandomInt(INT_(ZombieSpawns_Smoker), INT_(ZombieSpawns_Witch)));
-			switch(SpawnType)
-			{
-				case ZombieSpawns_Smoker:
-				{
-					if(g_iHellWave_Smokers_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Boomer:
-				{
-					if(g_iHellWave_Boomers_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Hunter:
-				{
-					if(g_iHellWave_Hunters_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Jockey:
-				{
-					if(g_iHellWave_Jockeys_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Charger:
-				{
-					if(g_iHellWave_Chargers_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Tank:
-				{
-					if(g_iHellWave_Tanks_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Witch:
-				{
-					if(g_iHellWave_Witches_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Spitter:
-				{
-					if(g_iHellWave_Spitters_Max < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-			}
-			
-			if(SpawnType != ZombieSpawns_None || MaxRetry >= 500)
-			{
-				return SpawnType;
-			}
-		}
-		return SpawnType;
+		int validCount;
+		ZombieSpawns[] validTypes = new ZombieSpawns[INT_(ZombieSpawns_Max)];
+		
+		if(g_iHellWave_Smokers_Max >= 1) validTypes[validCount++] = ZombieSpawns_Smoker;
+		if(g_iHellWave_Boomers_Max >= 1) validTypes[validCount++] = ZombieSpawns_Boomer;
+		if(g_iHellWave_Hunters_Max >= 1) validTypes[validCount++] = ZombieSpawns_Hunter;
+		if(g_iHellWave_Jockeys_Max >= 1) validTypes[validCount++] = ZombieSpawns_Jockey;
+		if(g_iHellWave_Chargers_Max >= 1) validTypes[validCount++] = ZombieSpawns_Charger;
+		if(g_iHellWave_Tanks_Max >= 1) validTypes[validCount++] = ZombieSpawns_Tank;
+		if(g_iHellWave_Witches_Max >= 1) validTypes[validCount++] = ZombieSpawns_Witch;
+		if(g_iHellWave_Spitters_Max >= 1) validTypes[validCount++] = ZombieSpawns_Spitter;
+		
+		return (validCount > 0 ? view_as<ZombieSpawns>(validTypes[GetRandomInt(0, validCount - 1)]) : ZombieSpawns_None);
 	}
 }
 
@@ -908,79 +848,19 @@ enum struct HellPortal
 	}
 	ZombieSpawns PickRandomSpecial()
 	{
-		int MaxRetry;
-		ZombieSpawns SpawnType = ZombieSpawns_None;
-		while(SpawnType == ZombieSpawns_None)
-		{
-			++MaxRetry;
-			
-			SpawnType = view_as<ZombieSpawns>(GetRandomInt(INT_(ZombieSpawns_Smoker), INT_(ZombieSpawns_Witch)));
-			switch(SpawnType)
-			{
-				case ZombieSpawns_Smoker:
-				{
-					if(this.m_iSmokers < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Boomer:
-				{
-					if(this.m_iBoomers < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Hunter:
-				{
-					if(this.m_iHunters < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Jockey:
-				{
-					if(this.m_iJockeys < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Charger:
-				{
-					if(this.m_iChargers < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Tank:
-				{
-					if(this.m_iTanks < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Witch:
-				{
-					if(this.m_iWitches < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-				case ZombieSpawns_Spitter:
-				{
-					if(this.m_iSpitters < 1)
-					{
-						SpawnType = ZombieSpawns_None;
-					}
-				}
-			}
-			
-			if(SpawnType != ZombieSpawns_None || MaxRetry >= 500)
-			{
-				return SpawnType;
-			}
-		}
-		return SpawnType;
+		int validCount;
+		ZombieSpawns[] validTypes = new ZombieSpawns[INT_(ZombieSpawns_Max)];
+		
+		if(this.m_iSmokers >= 1) validTypes[validCount++] = ZombieSpawns_Smoker;
+		if(this.m_iBoomers >= 1) validTypes[validCount++] = ZombieSpawns_Boomer;
+		if(this.m_iHunters >= 1) validTypes[validCount++] = ZombieSpawns_Hunter;
+		if(this.m_iJockeys >= 1) validTypes[validCount++] = ZombieSpawns_Jockey;
+		if(this.m_iChargers >= 1) validTypes[validCount++] = ZombieSpawns_Charger;
+		if(this.m_iTanks >= 1) validTypes[validCount++] = ZombieSpawns_Tank;
+		if(this.m_iWitches >= 1) validTypes[validCount++] = ZombieSpawns_Witch;
+		if(this.m_iSpitters >= 1) validTypes[validCount++] = ZombieSpawns_Spitter;
+		
+		return (validCount > 0 ? view_as<ZombieSpawns>(validTypes[GetRandomInt(0, validCount - 1)]) : ZombieSpawns_None);
 	}
 	void RemoveSpawnTickets(ZombieSpawns SpawnType)
 	{
