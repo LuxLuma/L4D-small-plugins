@@ -1134,7 +1134,7 @@ HellSpawnWitch g_HellSpawnWitch[2048+1];
 HellSpawnCommon g_HellSpawnCommon[2048+1];
 HellSpawn g_HellSpawn[MAXPLAYERS+1];
 HellPortal g_HellPortal[MAX_HELL_PORTALS];
-int g_iPortalEntityIndex[MAX_HELL_PORTALS];
+int g_iPortalEntityIndex[MAX_HELL_PORTALS] = {-1, ...};
 
 int FindAvailablePortalSlot()
 {
@@ -1291,10 +1291,6 @@ public void OnPluginStart()
 	for(int i; i <= MAXPLAYERS; ++i)
 	{
 		g_HellSpawn[i].m_client = i;
-	}
-	for(int i = 0; i < MAX_HELL_PORTALS; ++i)
-	{
-		g_iPortalEntityIndex[i] = -1;
 	}
 	
 	--g_OneShotDeathCrySize;
