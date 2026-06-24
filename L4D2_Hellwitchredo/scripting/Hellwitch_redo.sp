@@ -73,7 +73,7 @@ bool g_bAllowEscapeWitch_PortalCall;
 
 #define LOWER_HELLSPAWN_SOUNDS_MAX 3
 
-char LHSTankSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSTankSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/tank/voice/attack/tank_attack_01.wav",
 	")player/tank/voice/attack/tank_attack_02.wav",
@@ -85,7 +85,7 @@ char LHSTankSounds[][PLATFORM_MAX_PATH] =
 	")player/tank/voice/pain/tank_fire_06.wav"
 };
 
-char LHSBoomerSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSBoomerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/boomer/voice/warn/male_boomer_warning_01.wav",
 	")player/boomer/voice/warn/male_boomer_warning_12.wav",
@@ -97,7 +97,7 @@ char LHSBoomerSounds[][PLATFORM_MAX_PATH] =
 	")player/boomer/voice/warn/female_boomer_warning_17.wav"
 };
 
-char LHSSmokerSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSSmokerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/smoker/voice/warn/smoker_warn_01.wav",
 	")player/smoker/voice/warn/smoker_warn_03.wav",
@@ -106,7 +106,7 @@ char LHSSmokerSounds[][PLATFORM_MAX_PATH] =
 	")player/smoker/voice/warn/smoker_warn_06.wav"
 };
 
-char LHSHunterSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSHunterSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/hunter/voice/warn/hunter_warn_10.wav",
 	")player/hunter/voice/warn/hunter_warn_14.wav",
@@ -115,7 +115,7 @@ char LHSHunterSounds[][PLATFORM_MAX_PATH] =
 	")player/hunter/voice/warn/hunter_warn_18.wav"
 };
 
-char LHSJockeySounds[][PLATFORM_MAX_PATH] =
+char g_sLHSJockeySounds[][PLATFORM_MAX_PATH] =
 {
 	")player/jockey/voice/alert/jockey_02.wav",
 	")player/jockey/voice/alert/jockey_04.wav",
@@ -124,7 +124,7 @@ char LHSJockeySounds[][PLATFORM_MAX_PATH] =
 	")player/jockey/voice/idle/jockey_lurk06.wav"
 };
 
-char LHSChargerSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSChargerSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/charger/voice/alert/charger_alert_01.wav",
 	")player/charger/voice/alert/charger_alert_02.wav",
@@ -133,7 +133,7 @@ char LHSChargerSounds[][PLATFORM_MAX_PATH] =
 	")player/charger/voice/attack/charger_melee01.wav"
 };
 
-char LHSSpitterSounds[][PLATFORM_MAX_PATH] =
+char g_sLHSSpitterSounds[][PLATFORM_MAX_PATH] =
 {
 	")player/spitter/voice/idle/spitter_spotprey_01.wav",
 	")player/spitter/voice/idle/spitter_spotprey_02.wav",
@@ -1220,33 +1220,33 @@ public void OnMapStart()
 	{
 		PrecacheSound(g_sGreaterElectric[i], true);
 	}
-	for(int i; i < sizeof(LHSTankSounds); ++i)
+	for(int i; i < sizeof(g_sLHSTankSounds); ++i)
 	{
-		PrecacheSound(LHSTankSounds[i], true);
+		PrecacheSound(g_sLHSTankSounds[i], true);
 	}
-	for(int i; i < sizeof(LHSBoomerSounds); ++i)
+	for(int i; i < sizeof(g_sLHSBoomerSounds); ++i)
 	{
-		PrecacheSound(LHSBoomerSounds[i], true);
+		PrecacheSound(g_sLHSBoomerSounds[i], true);
 	}	
-	for(int i; i < sizeof(LHSSmokerSounds); ++i)
+	for(int i; i < sizeof(g_sLHSSmokerSounds); ++i)
 	{
-		PrecacheSound(LHSSmokerSounds[i], true);
+		PrecacheSound(g_sLHSSmokerSounds[i], true);
 	}
-	for(int i; i < sizeof(LHSHunterSounds); ++i)
+	for(int i; i < sizeof(g_sLHSHunterSounds); ++i)
 	{
-		PrecacheSound(LHSHunterSounds[i], true);
+		PrecacheSound(g_sLHSHunterSounds[i], true);
 	}
-	for(int i; i < sizeof(LHSJockeySounds); ++i)
+	for(int i; i < sizeof(g_sLHSJockeySounds); ++i)
 	{
-		PrecacheSound(LHSJockeySounds[i], true);
+		PrecacheSound(g_sLHSJockeySounds[i], true);
 	}
-	for(int i; i < sizeof(LHSChargerSounds); ++i)
+	for(int i; i < sizeof(g_sLHSChargerSounds); ++i)
 	{
-		PrecacheSound(LHSChargerSounds[i], true);
+		PrecacheSound(g_sLHSChargerSounds[i], true);
 	}
-	for(int i; i < sizeof(LHSSpitterSounds); ++i)
+	for(int i; i < sizeof(g_sLHSSpitterSounds); ++i)
 	{
-		PrecacheSound(LHSSpitterSounds[i], true);
+		PrecacheSound(g_sLHSSpitterSounds[i], true);
 	}
 	
 	PrecacheSound(HELLWITCH_DEATHSOUND_1, true);
@@ -2064,8 +2064,8 @@ void EmitLowerHellSpawn_SFK(ZombieSpawns Type)
 	{
 		case ZombieSpawns_Tank:
 		{
-			int iRng = GetRandomInt(0, sizeof(LHSTankSounds) - 1);
-			sSound = LHSTankSounds[iRng];
+			int iRng = GetRandomInt(0, sizeof(g_sLHSTankSounds) - 1);
+			sSound = g_sLHSTankSounds[iRng];
 			if(iRng == 6 || iRng == 7)
 			{
 				iPitch = 80;
@@ -2077,32 +2077,32 @@ void EmitLowerHellSpawn_SFK(ZombieSpawns Type)
 		}
 		case ZombieSpawns_Boomer:
 		{
-			sSound = LHSBoomerSounds[GetRandomInt(0, sizeof(LHSBoomerSounds) - 1)];
+			sSound = g_sLHSBoomerSounds[GetRandomInt(0, sizeof(g_sLHSBoomerSounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Smoker:
 		{
-			sSound = LHSSmokerSounds[GetRandomInt(0, sizeof(LHSSmokerSounds) - 1)];
+			sSound = g_sLHSSmokerSounds[GetRandomInt(0, sizeof(g_sLHSSmokerSounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Hunter:
 		{
-			sSound = LHSHunterSounds[GetRandomInt(0, sizeof(LHSHunterSounds) - 1)];
+			sSound = g_sLHSHunterSounds[GetRandomInt(0, sizeof(g_sLHSHunterSounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Jockey:
 		{
-			sSound = LHSJockeySounds[GetRandomInt(0, sizeof(LHSJockeySounds) - 1)];
+			sSound = g_sLHSJockeySounds[GetRandomInt(0, sizeof(g_sLHSJockeySounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Charger:
 		{
-			sSound = LHSChargerSounds[GetRandomInt(0, sizeof(LHSChargerSounds) - 1)];
+			sSound = g_sLHSChargerSounds[GetRandomInt(0, sizeof(g_sLHSChargerSounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Spitter:
 		{
-			sSound = LHSSpitterSounds[GetRandomInt(0, sizeof(LHSSpitterSounds) - 1)];
+			sSound = g_sLHSSpitterSounds[GetRandomInt(0, sizeof(g_sLHSSpitterSounds) - 1)];
 			iPitch = 60;
 		}
 		case ZombieSpawns_Witch:
